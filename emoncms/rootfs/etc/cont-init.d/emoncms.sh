@@ -9,6 +9,8 @@ declare mysql_database
 declare mysql_username
 declare mysql_password
 declare mysql_port
+declare redis_host
+declare redis_port
 
 if bashio::config.has_value "remote_mysql_host"; then
     if ! bashio::config.has_value 'remote_mysql_database'; then
@@ -109,6 +111,10 @@ export MYSQL_NAME
 export MYSQL_USERNAME
 export MYSQL_PASSWORD
 export MYSQL_PORT
+export REDIS_HOST
+export REDIS_PORT
+export REDIS_ENABLED
+export REDIS_PREFIX
 
 if bashio::config.has_value 'remote_mysql_host';then
     MYSQL_HOST=$(bashio::config "remote_mysql_host")
@@ -122,6 +128,13 @@ else
     MYSQL_USERNAME=$(bashio::services "mysql" "username")
     MYSQL_PASSWORD=$(bashio::services "mysql" "password")
     MYSQL_PORT=$(bashio::services "mysql" "port")
+fi
+
+if bashio::config.has_value 'remote_redis_host';then
+    REDIS_HOST=$(bashio::config "remote_redis_host")
+    REDIS_PORT=$(bashio::config "remote_redis_port")
+    REDIS_ENABLED=true
+    REDIS_PREFIX="emoncms"
 fi
 
 php scripts/emoncms-cli admin:dbupdate

@@ -31,8 +31,8 @@
     "remote_mysql_username": "str?",
     "remote_mysql_password": "str?",
     "remote_mysql_port": "int?",
-    "redis_host": "str?",
-    "redis_port": "int?"    
+    "remote_redis_host": "str?",
+    "remote_redis_port": "int?"    
   },
   "image": "yac69/hassio-emoncms-{arch}"
 }
