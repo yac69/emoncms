@@ -11,7 +11,7 @@
   "services": ["mysql:want"],
   "map": ["ssl"],
   "ports": {
-    "80/tcp": 9541
+    "80/tcp": 9542
   },
   "ports_description": {
     "80/tcp": "Emoncms web interface"
@@ -34,5 +34,5 @@
     "remote_redis_host": "str?",
     "remote_redis_port": "int?"    
   },
-  "image": "yac69/hassio-emoncms-{arch}"
+  "image": "inversechi/hassio-emoncms-{arch}"
 }
