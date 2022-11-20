@@ -64,11 +64,11 @@ LABEL \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
-    maintainer="Malachi Soord" \
+    maintainer="Alex le Petit" \
     org.opencontainers.image.title="Emoncms" \
     org.opencontainers.image.description="Emoncms is a powerful open-source web-app for processing, logging and visualising energy, temperature and other environmental data." \
     org.opencontainers.image.vendor="Home Assistant Community Add-ons" \
-    org.opencontainers.image.authors="Malachi Soord" \
+    org.opencontainers.image.authors="Alex le Petit" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.url="https://addons.community" \
     org.opencontainers.image.source="https://github.com/inverse/hassio-addon-emoncms" \
