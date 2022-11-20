@@ -1,9 +1,9 @@
-#!/usr/bin/with-contenv bashio
+#!/usr/bin/execlineb -S0
 # ==============================================================================
 # Home Assistant Community Add-on: Emoncms
-# Runs the Nginx daemon
+# Take down the S6 supervision tree when Redis fails
 # ==============================================================================
-# Wait for PHP-FPM to become available
-bashio::net.wait_for 9001
-bashio::log.info "Starting NGinx server..."
-exec nginx -g "daemon off;"
+if -n { s6-test $# -ne 0 }
+if -n { s6-test ${1} -eq 256 }
+
+s6-svscanctl -t /var/run/s6/services

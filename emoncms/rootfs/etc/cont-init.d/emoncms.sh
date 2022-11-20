@@ -9,8 +9,6 @@ declare mysql_database
 declare mysql_username
 declare mysql_password
 declare mysql_port
-declare redis_host
-declare redis_port
 
 if bashio::config.has_value "remote_mysql_host"; then
     if ! bashio::config.has_value 'remote_mysql_database'; then
@@ -66,21 +64,23 @@ cd /var/www/emoncms
 bashio::log.info "Configuring settings.php"
 
 cp example.settings.php settings.php
+
+# Setup Database params
 sed -i "s/\"server\"   => \"localhost\"/\"server\"   => getenv('MYSQL_HOST')/g" settings.php
 sed -i "s/\"database\" => \"emoncms\"/\"database\" => getenv('MYSQL_NAME')/g" settings.php
 sed -i "s/\"_DB_USER_\"/getenv('MYSQL_USERNAME')/g" settings.php
 sed -i "s/\"_DB_PASSWORD_\"/getenv('MYSQL_PASSWORD')/g" settings.php
 sed -i "s/\"port\"     => 3306/\"port\"     => getenv('MYSQL_PORT')/g" settings.php
 
-sed -i "s/\"enabled\"     => false/\"enabled\"     => getenv('REDIS_ENABLED')/g" settings.php
-
+# Setup data directories
 sed -i "s/\/var\/opt\/emoncms\/phpfina\//\/data\/emoncms\/phpfina\//g" settings.php
 sed -i "s/\/var\/opt\/emoncms\/phptimeseries\//\/data\/emoncms\/phptimeseries\//g" settings.php
 
+# Enable Redis
+sed -i '/"redis"=>array($/{N;s/\('"'"'enabled'"'"' => \)false/\1true/}' settings.php
+
 # Configure logging
-
 bashio::log.info "Setting up logging"
-
 mkdir -p /var/log/emoncms
 touch /var/log/emoncms/emoncms.log
 chmod 666 /var/log/emoncms/emoncms.log
@@ -112,10 +112,6 @@ export MYSQL_NAME
 export MYSQL_USERNAME
 export MYSQL_PASSWORD
 export MYSQL_PORT
-export REDIS_HOST
-export REDIS_PORT
-export REDIS_ENABLED
-export REDIS_PREFIX
 
 if bashio::config.has_value 'remote_mysql_host';then
     MYSQL_HOST=$(bashio::config "remote_mysql_host")
@@ -129,13 +125,6 @@ else
     MYSQL_USERNAME=$(bashio::services "mysql" "username")
     MYSQL_PASSWORD=$(bashio::services "mysql" "password")
     MYSQL_PORT=$(bashio::services "mysql" "port")
-fi
-
-if bashio::config.has_value 'remote_redis_host';then
-    REDIS_HOST=$(bashio::config "remote_redis_host")
-    REDIS_PORT=$(bashio::config "remote_redis_port")
-    REDIS_ENABLED="true"
-    REDIS_PREFIX="emoncms"
 fi
 
 php scripts/emoncms-cli admin:dbupdate
