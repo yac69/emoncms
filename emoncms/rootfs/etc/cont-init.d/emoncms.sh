@@ -72,6 +72,7 @@ sed -i "s/\"_DB_USER_\"/getenv('MYSQL_USERNAME')/g" settings.php
 sed -i "s/\"_DB_PASSWORD_\"/getenv('MYSQL_PASSWORD')/g" settings.php
 sed -i "s/\"port\"     => 3306/\"port\"     => getenv('MYSQL_PORT')/g" settings.php
 
+sed -i "s/\"enabled\"     => false/\"port\"     => getenv('REDIS_ENABLED')/g" settings.php
 
 sed -i "s/\/var\/opt\/emoncms\/phpfina\//\/data\/emoncms\/phpfina\//g" settings.php
 sed -i "s/\/var\/opt\/emoncms\/phptimeseries\//\/data\/emoncms\/phptimeseries\//g" settings.php
@@ -133,7 +134,7 @@ fi
 if bashio::config.has_value 'remote_redis_host';then
     REDIS_HOST=$(bashio::config "remote_redis_host")
     REDIS_PORT=$(bashio::config "remote_redis_port")
-    REDIS_ENABLED=true
+    REDIS_ENABLED="true"
     REDIS_PREFIX="emoncms"
 fi
 
